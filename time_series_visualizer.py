@@ -5,10 +5,13 @@ from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
 # Import data (Make sure to parse dates. Consider setting index column to 'date'.)
-df = None
+df = pd.read_csv('fcc-forum-pageviews.csv', parse_dates=True, index_col='date')
 
-# Clean data
-df = None
+# Clean the data by filtering out days when the page views were in the top 2.5% of the dataset or bottom 2.5% of the dataset
+lower_quantile = df['value'].quantile(0.025)
+upper_quantile = df['value'].quantile(0.975)
+
+df = df.loc[(df['value'] >= lower_quantile) & (df['value'] <= upper_quantile)]
 
 
 def draw_line_plot():
