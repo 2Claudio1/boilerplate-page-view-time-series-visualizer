@@ -17,9 +17,15 @@ df = df.loc[(df['value'] >= lower_quantile) & (df['value'] <= upper_quantile)]
 def draw_line_plot():
     # Draw line plot
 
-
-
-
+    # Create a draw_line_plot function that uses Matplotlib to draw a line chart similar to "examples/Figure_1.png". 
+    # The title should be Daily freeCodeCamp Forum Page Views 5/2016-12/2019. 
+    # The label on the x axis should be Date and the label on the y axis should be Page Views.
+    
+    fig = plt.figure(figsize=(14, 4.5))
+    plt.plot(df, color="#C80000", linewidth=1)
+    plt.title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
+    plt.xlabel('Date')
+    plt.ylabel('Page Views')
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
