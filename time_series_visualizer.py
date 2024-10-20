@@ -32,13 +32,32 @@ def draw_line_plot():
     return fig
 
 def draw_bar_plot():
+    # Create a draw_bar_plot function that draws a bar chart similar to "examples/Figure_2.png".
+
     # Copy and modify data for monthly bar plot
-    df_bar = None
+    df_bar = df.copy() # Make a copy of the original DataFrame
+    df_bar['year'] = df_bar.index.year  # Extract year from the index and create a new 'year' column
+    df_bar['month'] = df_bar.index.month    # Extract month (as a number) from the index and create a new 'month' column
 
-    # Draw bar plot
+    # Group by year and month, calculate the mean value, round it, convert it to integer, and handle missing months with 0.
+    df_bar = df_bar.groupby(['year', 'month'], sort=True)['value'].mean().round().astype(int).unstack().fillna(0).stack().reset_index(name='average_page_views')
+    
+    # Convert the 'month' numbers into month names using the ordered list
+    months_ordered = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    df_bar['month'] = df_bar['month'].apply(lambda x: months_ordered[x - 1])
 
 
+    fig, ax = plt.subplots(figsize=(14, 12))
 
+    ax.set_xlabel("Years", fontsize=18) # Label and fontsize for x-axis (years)
+    ax.set_ylabel("Average Page Views", fontsize=18) # Label and fontsize for y-axis (average_page_views)
+
+    # Create the bar plot using seaborn
+    sns.barplot(data=df_bar, x="year", y="average_page_views", hue="month", palette="tab10", dodge=True, width=0.5)
+    ax.legend(title='Months', title_fontsize=18, fontsize=18)
+    plt.xticks(rotation=90, horizontalalignment='center')
+    ax.tick_params(axis='x', labelsize=18)  # Increase font size for x-axis (years)
+    ax.tick_params(axis='y', labelsize=18)  # Increase font size for y-axis (average page views)
 
 
     # Save image and return fig (don't change this part)
